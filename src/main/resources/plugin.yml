@@ -1,0 +1,11 @@
+name: Md5Lukas-Commons
+version: 0.1.0
+main: de.md5lukas.commons.internal.CommonsMain
+author: Md5Lukas (Sytm)
+api-version: 1.13
+
+commands:
+  language:
+    aliases: ["lang", "l"]
+    description: You can change the language of every plugin of mine with this command
+    usage: /language <language>
