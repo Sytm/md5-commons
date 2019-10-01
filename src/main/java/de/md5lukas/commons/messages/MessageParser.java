@@ -122,7 +122,7 @@ public class MessageParser {
 		original.forEach((key, str) -> original.put(key, ChatColor.translateAlternateColorCodes('&', str)));
 		variables.forEach((key, str) -> variables.put(key, ChatColor.translateAlternateColorCodes('&', str)));
 
-		Map<String, String> messages = new HashMap<>();
+		Map<String, Message> messages = new HashMap<>();
 
 		for (Map.Entry<String, String> e : original.entrySet()) {
 			String messageKey = e.getKey();
@@ -134,7 +134,7 @@ public class MessageParser {
 				message = message.replace(variableEnclosing + variableKey + variableEnclosing, variable);
 			}
 
-			messages.put(messageKey, message);
+			messages.put(messageKey, new Message(message));
 		}
 		return new ParseResult(original, messages, variables);
 	}
@@ -149,9 +149,10 @@ public class MessageParser {
 
 	public final static class ParseResult {
 
-		private final ImmutableMap<String, String> original, messages, variables;
+		private final ImmutableMap<String, String> original, variables;
+		private final ImmutableMap<String, Message> messages;
 
-		private ParseResult(Map<String, String> original, Map<String, String> messages, Map<String, String> variables) {
+		private ParseResult(Map<String, String> original, Map<String, Message> messages, Map<String, String> variables) {
 			this.original = ImmutableMap.copyOf(original);
 			this.messages = ImmutableMap.copyOf(messages);
 			this.variables = ImmutableMap.copyOf(variables);
@@ -161,7 +162,7 @@ public class MessageParser {
 			return original;
 		}
 
-		public ImmutableMap<String, String> getMessages() {
+		public ImmutableMap<String, Message> getMessages() {
 			return messages;
 		}
 

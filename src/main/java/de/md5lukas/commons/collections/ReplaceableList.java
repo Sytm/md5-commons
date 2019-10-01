@@ -2,14 +2,13 @@ package de.md5lukas.commons.collections;
 
 import de.md5lukas.commons.StringHelper;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 public class ReplaceableList extends ArrayList<String> {
 
-	public ReplaceableList() {
+	private ReplaceableList() {
 	}
 
 	public ReplaceableList(int initialCapacity) {

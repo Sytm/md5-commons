@@ -2,10 +2,8 @@ package de.md5lukas.commons.messages;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import de.md5lukas.commons.UUIDUtils;
 import de.md5lukas.commons.internal.CommonsMain;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,18 +13,14 @@ import java.util.stream.Collectors;
 
 public class MessageStore {
 
-	private Map<String, Map<String, String>> messages;
+	private Map<String, Map<String, Message>> messages;
 
 	public MessageStore(File messageFolder, String fileFormat, Class<? extends Enum<?>> messageEnum) throws IOException {
 		List<String> requiredMessages = Arrays.stream(messageEnum.getEnumConstants()).map(Enum::toString).collect(Collectors.toList());
 		this.messages = new HashMap<>();
 
 		MessageParser.ParseResult result = MessageParser.getDefaultParser().parse(new File(messageFolder, String.format(fileFormat, Languages.getDefaultLanguage())));
-		Map<String, String> defaultMessages = result.getMessages();
-		if (defaultMessages == null) {
-			throw new IllegalStateException("Couldn't load default messages, see console output for more details");
-		}
-		this.messages.put(Languages.getDefaultLanguage(), defaultMessages);
+		messages.put(Languages.getDefaultLanguage(), result.getMessages());
 		Languages.registerLanguage(Languages.getDefaultLanguage());
 
 		for (String language : Locale.getISOLanguages()) {
@@ -35,14 +29,12 @@ public class MessageStore {
 			File file = new File(messageFolder, String.format(fileFormat, language));
 			if (!file.exists())
 				continue;
-			Map<String, String> messages = MessageParser.getDefaultParser().parse(file).getMessages();
-			if (messages != null) {
-				this.messages.put(language, messages);
-				Languages.registerLanguage(language);
-			}
+
+			this.messages.put(language, MessageParser.getDefaultParser().parse(file).getMessages());
+			Languages.registerLanguage(language);
 		}
 		Map<String, List<String>> missing = new HashMap<>();
-		for (Map.Entry<String, Map<String, String>> en : messages.entrySet()) {
+		for (Map.Entry<String, Map<String, Message>> en : messages.entrySet()) {
 			for (String required : requiredMessages) {
 				if (!en.getValue().containsKey(required)) {
 					missing.compute(en.getKey(), (k, v) -> {
@@ -65,23 +57,17 @@ public class MessageStore {
 		}
 	}
 
-	public String getMessage(Enum<?> message) {
+	public Message getMessage(Enum<?> message) {
 		return messages.get(Languages.getDefaultLanguage()).get(message.toString());
 	}
 
-	public String getMessage(Enum<?> message, String language) {
+	public Message getMessage(Enum<?> message, String language) {
 		if (language == null)
 			return getMessage(message);
 		return messages.get(language).get(message.toString());
 	}
 
-	public String getMessage(Enum<?> message, CommandSender sender) {
-		if (sender == null)
-			return getMessage(message);
-		if(sender instanceof Player) {
-			return getMessage(message, Languages.getLanguage(((Player) sender).getUniqueId()));
-		} else {
-			return getMessage(message, Languages.getLanguage(UUIDUtils.ZERO_UUID));
-		}
+	public Message getMessage(Enum<?> message, CommandSender sender) {
+		return getMessage(message, Languages.getLanguage(sender));
 	}
 }

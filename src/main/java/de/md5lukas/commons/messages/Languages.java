@@ -5,6 +5,9 @@ import de.md5lukas.commons.UUIDUtils;
 import de.md5lukas.commons.internal.CommonsMain;
 import de.md5lukas.commons.internal.Md5CommonsConfig;
 import de.md5lukas.commons.internal.store.LanguageStore;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,6 +55,12 @@ public class Languages {
 		if (uuid.equals(UUIDUtils.ZERO_UUID))
 			return getDefaultLanguage();
 		return store.getLanguage(uuid);
+	}
+
+	public static String getLanguage(CommandSender sender) {
+		if (sender instanceof Player)
+			return getLanguage(((Player) sender).getUniqueId());
+		return getLanguage(UUIDUtils.ZERO_UUID);
 	}
 
 	public static void setLanguage(UUID uuid, String language) {
