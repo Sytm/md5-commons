@@ -9,18 +9,18 @@ import org.bukkit.command.CommandSender;
 public class Message {
 
 	private final TextComponent[] components;
-	private final String legacy;
+	private final String raw;
 	private final ReplaceableList asList;
 
-	public Message(String legacy) {
-		this.legacy = legacy;
-		this.asList = new ReplaceableList(StringHelper.split(legacy, '\n'));
+	public Message(String raw) {
+		this.raw = raw;
+		this.asList = new ReplaceableList(StringHelper.split(raw, '\n'));
 		this.asList.trimToSize();
-		this.components = (TextComponent[]) TextComponent.fromLegacyText(legacy);
+		this.components = (TextComponent[]) TextComponent.fromLegacyText(raw);
 	}
 
-	public String getLegacy() {
-		return legacy;
+	public String getRaw() {
+		return raw;
 	}
 
 	public void send(CommandSender commandSender) {
@@ -47,7 +47,7 @@ public class Message {
 		return cloneBaseComponents(components);
 	}
 
-	public ReplaceableList getAsList() {
+	public ReplaceableList asList() {
 		return asList;
 	}
 
@@ -68,7 +68,7 @@ public class Message {
 	@Override
 	public String toString() {
 		return "Message{" +
-			"legacy='" + legacy + '\'' +
+			"raw='" + raw + '\'' +
 			'}';
 	}
 }
