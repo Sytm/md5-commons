@@ -3,7 +3,9 @@ package de.md5lukas.commons.messages;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import de.md5lukas.commons.internal.CommonsMain;
+import de.md5lukas.commons.language.Languages;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,13 +17,13 @@ public class MessageStore {
 
 	private Map<String, Map<String, Message>> messages;
 
-	public MessageStore(File messageFolder, String fileFormat, Class<? extends Enum<?>> messageEnum) throws IOException {
+	public MessageStore(Plugin plugin, File messageFolder, String fileFormat, Class<? extends Enum<?>> messageEnum) throws IOException {
 		List<String> requiredMessages = Arrays.stream(messageEnum.getEnumConstants()).map(Enum::toString).collect(Collectors.toList());
 		this.messages = new HashMap<>();
 
 		MessageParser.ParseResult result = MessageParser.getDefaultParser().parse(new File(messageFolder, String.format(fileFormat, Languages.getDefaultLanguage())));
 		messages.put(Languages.getDefaultLanguage(), result.getMessages());
-		Languages.registerLanguage(Languages.getDefaultLanguage());
+		Languages.registerLanguage(plugin, Languages.getDefaultLanguage());
 
 		for (String language : Locale.getISOLanguages()) {
 			if (language.equals(Languages.getDefaultLanguage()))
@@ -31,7 +33,7 @@ public class MessageStore {
 				continue;
 
 			this.messages.put(language, MessageParser.getDefaultParser().parse(file).getMessages());
-			Languages.registerLanguage(language);
+			Languages.registerLanguage(plugin, language);
 		}
 		Map<String, List<String>> missing = new HashMap<>();
 		for (Map.Entry<String, Map<String, Message>> en : messages.entrySet()) {

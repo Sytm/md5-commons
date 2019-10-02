@@ -1,7 +1,6 @@
 package de.md5lukas.commons.inventory;
 
 import de.md5lukas.commons.StringHelper;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;

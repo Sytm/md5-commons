@@ -2,9 +2,10 @@ package de.md5lukas.commons.collections;
 
 import de.md5lukas.commons.StringHelper;
 
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 public class ReplaceableList extends ArrayList<String> {
 

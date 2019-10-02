@@ -1,4 +1,4 @@
-package de.md5lukas.commons.messages;
+package de.md5lukas.commons.language;
 
 import com.google.common.base.Joiner;
 import de.md5lukas.commons.UUIDUtils;
@@ -14,7 +14,8 @@ public class LanguageCommand implements CommandExecutor {
 		if (args.length == 0) {
 			Joiner j = Joiner.on(" ,");
 			StringBuilder sb = new StringBuilder("§eSupported Languages: ").append(j.join(Languages.getFullySupportedLanguages()));
-			sb.append("\nPartially supported languages: ").append(j.join(Languages.getPartiallySupportedLanguages()));
+			if (!Languages.getPartiallySupportedLanguages().isEmpty())
+				sb.append("\nPartially supported languages: ").append(j.join(Languages.getPartiallySupportedLanguages()));
 			sb.append("\nSelect your language with §a/language <Your Language>");
 			sender.sendMessage(sb.toString());
 		} else {

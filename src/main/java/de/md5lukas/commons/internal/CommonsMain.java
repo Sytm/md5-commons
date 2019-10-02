@@ -2,8 +2,8 @@ package de.md5lukas.commons.internal;
 
 import de.md5lukas.commons.data.PlayerStore;
 import de.md5lukas.commons.internal.store.NBTLanguageStore;
-import de.md5lukas.commons.messages.LanguageCommand;
-import de.md5lukas.commons.messages.Languages;
+import de.md5lukas.commons.language.LanguageCommand;
+import de.md5lukas.commons.language.Languages;
 import de.md5lukas.nbt.Tags;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;

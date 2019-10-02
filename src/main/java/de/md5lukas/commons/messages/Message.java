@@ -16,7 +16,7 @@ public class Message {
 		this.raw = raw;
 		this.asList = new ReplaceableList(StringHelper.split(raw, '\n'));
 		this.asList.trimToSize();
-		this.components = (TextComponent[]) TextComponent.fromLegacyText(raw);
+		this.components = cast(TextComponent.fromLegacyText(raw));
 	}
 
 	public String getRaw() {
@@ -57,6 +57,13 @@ public class Message {
 			copy[i] = new TextComponent(components[i]);
 		}
 		return copy;
+	}
+
+	private static TextComponent[] cast(BaseComponent[] components) {
+		TextComponent[] result = new TextComponent[components.length];
+		for (int i = 0; i < components.length; i++)
+			result[i] = (TextComponent) components[i];
+		return result;
 	}
 
 	private static void replaceInComponents(String target, String replacement, TextComponent[] components) {

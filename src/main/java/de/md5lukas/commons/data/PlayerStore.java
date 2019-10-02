@@ -1,6 +1,9 @@
 package de.md5lukas.commons.data;
 
-import com.google.common.cache.*;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.cache.RemovalListener;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import de.md5lukas.commons.internal.CommonsMain;
 import de.md5lukas.nbt.NbtIo;

@@ -1,7 +1,7 @@
 package de.md5lukas.commons.internal.store;
 
 import de.md5lukas.commons.data.PlayerStore;
-import de.md5lukas.commons.messages.Languages;
+import de.md5lukas.commons.language.Languages;
 import de.md5lukas.nbt.tags.CompoundTag;
 import org.bukkit.plugin.Plugin;
 
