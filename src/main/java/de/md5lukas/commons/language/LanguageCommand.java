@@ -12,7 +12,7 @@ public class LanguageCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (args.length == 0) {
-			Joiner j = Joiner.on(" ,");
+			Joiner j = Joiner.on(", ");
 			StringBuilder sb = new StringBuilder("§eSupported Languages: ").append(j.join(Languages.getFullySupportedLanguages()));
 			if (!Languages.getPartiallySupportedLanguages().isEmpty())
 				sb.append("\nPartially supported languages: ").append(j.join(Languages.getPartiallySupportedLanguages()));
