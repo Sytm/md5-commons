@@ -6,7 +6,7 @@
 
     <groupId>de.md5lukas</groupId>
     <artifactId>md5-commons</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
