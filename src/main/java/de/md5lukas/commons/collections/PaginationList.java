@@ -14,14 +14,14 @@ public class PaginationList<T> extends ArrayList<T> {
 	}
 
 	public int pageStart(int page) {
-		if (page < 0 || page >= pages()) return -1;
+		if (page < 0 || page >= pages()) throw new IllegalArgumentException("The provided page number is out of bounds of the available pages");
 		int start = page * itemsPerPage;
 		if (start > size()) return -1;
 		return start;
 	}
 
 	public int pageEnd(int page) {
-		if (page < 0 || page >= pages()) return -1;
+		if (page < 0 || page >= pages()) throw new IllegalArgumentException("The provided page number is out of bounds of the available pages");
 		int end = (page * itemsPerPage) + itemsPerPage;
 		return Math.min(size(), end);
 	}
