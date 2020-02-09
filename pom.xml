@@ -28,7 +28,7 @@
     <repositories>
         <repository>
             <id>spigot-repo</id>
-            <url>https://repo.sytm.de/repository/maven-spigot/</url>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
             <id>sytm-nexus</id>
