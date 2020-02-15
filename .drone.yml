@@ -23,7 +23,7 @@ steps:
   - name: deploy_repo
     image: maven:3-jdk-8
     commands:
-      - mvn deploy -B
+      - mvn deploy -B -gs settings.xml
     when:
       event:
         - push
