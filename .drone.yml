@@ -19,7 +19,11 @@ steps:
         - push
   - name: authenticate
     image: robertstettner/drone-mvn-auth
-    secrets: [ maven_servers ]
+    servers:
+      - id: sytm-nexus
+        username: drone
+        password:
+          from_secret: repo_password
   - name: deploy_repo
     image: maven:3-jdk-8
     commands:
