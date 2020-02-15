@@ -1,0 +1,43 @@
+kind: pipeline
+name: default
+type: docker
+
+steps:
+  - name: compile
+    image: maven:3-jdk-8
+    commands:
+      - mvn compile -B -U
+    when:
+      event:
+        - push
+  - name: test
+    image: maven:3-jdk-8
+    commands:
+      - mvn test -B
+    when:
+      event:
+        - push
+  - name: authenticate
+    image: robertstettner/drone-mvn-auth
+    secrets: [ maven_servers ]
+  - name: deploy_repo
+    image: maven:3-jdk-8
+    commands:
+      - mvn deploy -B
+    when:
+      event:
+        - push
+  - name: deploy_gitea
+    image: plugins/gitea-release
+    settings:
+      base_url: https://git.sytm.de
+      api_key:
+        from_secret: gitea_token
+      files:
+        - target/*.jar
+      checksum:
+        - md5
+        - sha256
+    when:
+      event:
+        - push
