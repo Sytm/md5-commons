@@ -1,5 +1,5 @@
 name: Md5Lukas-Commons
-version: 0.1.0
+version: ${version}
 main: de.md5lukas.commons.internal.CommonsMain
 author: Md5Lukas (Sytm)
 api-version: 1.13
