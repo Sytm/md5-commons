@@ -1,9 +1,0 @@
-defaultLanguage: en
-
-uuidcache:
-  # Maximum amount of uuids cached at any point of time or auto
-  maxSize: 200
-  expiresAfter: 1
-  # The unit of the time window specified above
-  # Valid are the values: NANOSECONDS, MICROSECONDS, MILLISECONDS, SECONDS, MINUTES, HOURS, DAYS
-  expiresAfterTimeUnit: DAYS
