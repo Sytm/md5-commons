@@ -12,36 +12,12 @@ steps:
     image: maven:3-jdk-8
     commands:
       - mvn deploy -B -s settings.xml
-  - name: publish
-    image: plugins/github-release
-    settings:
-      api_key:
-        from_secret: github_token
-      files: target/md5-commons*
-      checksum:
-        - md5
-        - sha256
 
 trigger:
+  branch:
+    - master
   event:
     exclude:
       - pull_request
-    include:
-      - tag
----
-kind: pipeline
-name: test only
-type: docker
-
-steps:
-  - name: test
-    image: maven:3-jdk-8
-    commands:
-      - mvn test -B
-
-trigger:
-  event:
-    exclude:
-      - tag
     include:
       - push
