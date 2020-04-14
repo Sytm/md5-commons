@@ -9,15 +9,34 @@ steps:
       serverSecrets:
         from_secret: maven_server_secrets
   - name: deploy
-    image: maven:3-jdk-8
+    image: maven:3-jdk-11
     commands:
-      - mvn deploy -B -s settings.xml
+      - mvn deploy -B -ntp -s settings.xml
 
 trigger:
   branch:
-    - master
+    include:
+      - master
   event:
     exclude:
       - pull_request
     include:
       - push
+---
+kind: pipeline
+name: test
+type: docker
+
+steps:
+  - name: test
+    image: maven:3-jdk-11
+    commands:
+      - mvn verify -B -ntp
+
+trigger:
+  branch:
+    exclude:
+      - master
+  event:
+    - push
+    - pull_request
