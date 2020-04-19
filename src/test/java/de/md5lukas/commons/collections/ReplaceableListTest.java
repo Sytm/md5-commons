@@ -16,9 +16,8 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.md5lukas.commons.test;
+package de.md5lukas.commons.collections;
 
-import de.md5lukas.commons.collections.ReplaceableList;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
