@@ -26,7 +26,7 @@ import java.util.Objects;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class MathHelper {
+public final class MathHelper {
 
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("###.##");
 

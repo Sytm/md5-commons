@@ -27,7 +27,7 @@ import java.util.Set;
 /**
  * A class containing helper functions regarding color codes in strings
  */
-public class ColorCodeHelper {
+public final class ColorCodeHelper {
 
     /**
      * Extracts the last color and effects applied to the provided string
