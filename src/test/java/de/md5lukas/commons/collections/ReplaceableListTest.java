@@ -35,7 +35,7 @@ public class ReplaceableListTest {
     }
 
     @Test
-    public void checkReplace() {
+    void checkReplace() {
         assertIterableEquals(Arrays.asList("1 2-3 4", "F G 5 I", "1 2-3 4", "F G 5 I"),
                 list.replace("A", "1", "B C", "2-3", "D", "4", "F G I", "Not here", "H", "5"));
     }

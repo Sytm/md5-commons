@@ -41,7 +41,7 @@ public class PaginationListTest {
     }
 
     @Test
-    public void checkPageCalculation() {
+    void checkPageCalculation() {
         assertEquals(3, list.pages());
         list.add(7);
         assertEquals(4, list.pages());
@@ -50,14 +50,14 @@ public class PaginationListTest {
     }
 
     @Test
-    public void checkNegativePage() {
+    void checkNegativePage() {
         assertThrows(IllegalArgumentException.class, () -> {
             list.page(-1);
         });
     }
 
     @Test
-    public void checkTooBigPage() {
+    void checkTooBigPage() {
         assertThrows(IllegalArgumentException.class, () -> {
             list.page(4);
         });

@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.md5lukas.commons.text;
+package de.md5lukas.commons.time;
 
 import com.google.common.base.Preconditions;
 import de.md5lukas.commons.TriFunction;

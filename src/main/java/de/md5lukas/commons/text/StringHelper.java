@@ -135,4 +135,37 @@ public final class StringHelper {
 
         return result;
     }
+
+    /**
+     * Removes the suffix from the provided string based on the length of the suffix
+     *
+     * @param string The string where the suffix should be removed from
+     * @param suffix The suffix string to remove
+     * @return The string with the suffix removed
+     * @throws NullPointerException     If the string or suffix is null
+     * @throws IllegalArgumentException If the suffix is longer than the string
+     */
+    public static String removeSuffix(String string, String suffix) {
+        checkNotNull(string, "The string cannot be null");
+        checkNotNull(suffix, "The suffix cannot be null");
+        checkArgument(string.length() >= suffix.length(), "The suffix is longer than the string where it should be removed");
+        String result = string.substring(0, string.length() - suffix.length());
+        return result;
+    }
+
+    /**
+     * Removes the prefix from the provided string based on the length of the prefix
+     *
+     * @param string The string where the suffix should be removed from
+     * @param prefix The prefix string to remove
+     * @return The string with the suffix removed
+     * @throws NullPointerException     If the string or prefix is null
+     * @throws IllegalArgumentException If the prefix is longer than the string
+     */
+    public static String removePrefix(String string, String prefix) {
+        checkNotNull(string, "The string cannot be null");
+        checkNotNull(prefix, "The prefix cannot be null");
+        checkArgument(string.length() >= prefix.length(), "The prefix is longer than the string where it should be removed");
+        return string.substring(prefix.length());
+    }
 }

@@ -34,7 +34,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
- * A  class containing helpers for zipping folders
+ * A class containing helpers for zipping folders
  */
 @SuppressWarnings("ConstantConditions")
 public final class ZipHelper {
