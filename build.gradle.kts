@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "de.md5lukas"
-version = "2.0.0-SNAPSHOT"
+version = "2.0.0"
 description = "md5-commons"
 
 repositories {
