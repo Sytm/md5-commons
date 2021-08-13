@@ -1,21 +1,3 @@
-/*
- *     A collection of classes and methods designed for use in spigot plugins
- *     Copyright (C) 2020 Lukas Planz
- *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU Lesser General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU Lesser General Public License for more details.
- *
- *     You should have received a copy of the GNU Lesser General Public License
- *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package de.md5lukas.commons.uuid;
 
 import com.google.common.cache.CacheBuilder;
@@ -170,9 +152,7 @@ public final class UUIDUtils {
         checkNotNull(callback, "The callback cannot be null");
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             Optional<UUID> uuid = getUUID(name);
-            Bukkit.getScheduler().runTask(plugin, () -> {
-                callback.accept(uuid);
-            });
+            Bukkit.getScheduler().runTask(plugin, () -> callback.accept(uuid));
         });
     }
 
@@ -190,16 +170,12 @@ public final class UUIDUtils {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 String name = nameCache.get(uuid);
-                Bukkit.getScheduler().runTask(plugin, () -> {
-                    callback.accept(name);
-                });
+                Bukkit.getScheduler().runTask(plugin, () -> callback.accept(name));
                 return;
             } catch (ExecutionException ee) {
                 plugin.getLogger().log(Level.SEVERE, "An error occurred while trying to retrieve the name of the player with the uuid of " + uuid, ee);
             }
-            Bukkit.getScheduler().runTask(plugin, () -> {
-                callback.accept(null);
-            });
+            Bukkit.getScheduler().runTask(plugin, () -> callback.accept(null));
         });
     }
 

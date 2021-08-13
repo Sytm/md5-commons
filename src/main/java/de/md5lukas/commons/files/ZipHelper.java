@@ -1,21 +1,3 @@
-/*
- *     A collection of classes and methods designed for use in spigot plugins
- *     Copyright (C) 2020 Lukas Planz
- *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU Lesser General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU Lesser General Public License for more details.
- *
- *     You should have received a copy of the GNU Lesser General Public License
- *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package de.md5lukas.commons.files;
 
 import java.io.File;
@@ -55,7 +37,11 @@ public final class ZipHelper {
         checkNotNull(destinationFile, "The destination file cannot be null");
         checkState(sourceFolder.isDirectory(), "The sourceFolder %s does not exist or isn't a folder", sourceFolder.getAbsolutePath());
         checkState(!destinationFile.exists(), "The destination file %s already exists", destinationFile.getAbsolutePath());
-        destinationFile.mkdirs();
+
+        File destinationFolder = destinationFile.getParentFile();
+        if (!destinationFolder.exists() && destinationFile.mkdirs()) {
+            throw new IllegalStateException("Could not create the target folder " + destinationFolder.getAbsolutePath());
+        }
 
         try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(destinationFile))) {
             Path root = sourceFolder.toPath();
