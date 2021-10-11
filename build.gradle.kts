@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "de.md5lukas"
-version = "2.0.0"
+version = "2.0.0-SNAPSHOT"
 description = "md5-commons"
 
 repositories {
@@ -12,12 +12,13 @@ repositories {
     mavenCentral()
 
     maven(url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
 }
 
 dependencies {
     api("org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT")
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 }
 
 java {
