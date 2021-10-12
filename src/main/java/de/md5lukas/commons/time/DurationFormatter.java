@@ -102,7 +102,7 @@ public final class DurationFormatter {
     }
 
     private static String pluralizationHelper(Player player, long value, TimeUnit timeUnit) {
-        boolean isPlural = value == 1;
+        boolean isPlural = value != 1;
         return pluralizationHelper.apply(player, timeUnit, isPlural);
     }
 }
