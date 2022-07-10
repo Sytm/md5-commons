@@ -4,11 +4,10 @@ plugins {
 }
 
 group = "de.md5lukas"
-version = "2.0.0-SNAPSHOT"
+version = "2.0.0"
 description = "md5-commons"
 
 repositories {
-    mavenLocal()
     mavenCentral()
 
     maven(url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
@@ -27,6 +26,21 @@ java {
 }
 
 publishing {
+    repositories {
+        maven {
+            name = "md5lukasReposilite"
+
+            url = uri("https://repo.md5lukas.de/${if (version.toString().endsWith("-SNAPSHOT")) {
+                "snapshots"
+            } else {
+                "releases"
+            }}")
+            credentials(PasswordCredentials::class)
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+        }
+    }
     publications.create<MavenPublication>("maven") {
         from(components["java"])
     }
