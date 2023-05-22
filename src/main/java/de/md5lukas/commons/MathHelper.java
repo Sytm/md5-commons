@@ -1,6 +1,7 @@
 package de.md5lukas.commons;
 
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.util.Objects;
@@ -59,7 +60,7 @@ public final class MathHelper {
      * @throws NullPointerException     If either location1 or location 2 are null
      * @throws IllegalArgumentException If both locations are not in the same world
      */
-    public static double distance2DSquared(Location location1, Location location2) {
+    public static double distance2DSquared(@NotNull Location location1, @NotNull Location location2) {
         checkNotNull(location1, "The first location cannot be null");
         checkNotNull(location2, "The second location cannot be null");
         checkArgument(Objects.equals(location1.getWorld(), location2.getWorld()));
@@ -77,7 +78,7 @@ public final class MathHelper {
      * @see #distance2DSquared(Location, Location) If you just want to compare two distances. This method does not have to calcluate the square
      * root and is more performant
      */
-    public static double distance2D(Location location1, Location location2) {
+    public static double distance2D(@NotNull Location location1, @NotNull Location location2) {
         return Math.sqrt(distance2DSquared(location1, location2));
     }
 

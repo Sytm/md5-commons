@@ -9,6 +9,7 @@ import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,8 +18,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
+import java.util.concurrent.Executor;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
@@ -37,15 +39,18 @@ public final class UUIDUtils {
     private final LoadingCache<String, UUID> uuidCache;
     private final LoadingCache<UUID, String> nameCache;
     private final Plugin plugin;
+    private final Executor executor;
 
     /**
      * Creates a new instance of UUIDUtils using the plugin for logging and scheduler creation
      *
      * @param plugin   The plugin to use
+     * @param executor The executor to perform async operations on
      * @param settings The settings for the cache that should be used
      */
-    public UUIDUtils(Plugin plugin, UUIDCacheSettings settings) {
+    public UUIDUtils(@NotNull Plugin plugin, @NotNull Executor executor, @NotNull UUIDCacheSettings settings) {
         this.plugin = plugin;
+        this.executor = executor;
 
         uuidCache = CacheBuilder.newBuilder().maximumSize(settings.getMaxSize())
                 .expireAfterWrite(settings.getExpireAfterWrite(), settings.getExpireAfterWriteTimeUnit()).build(new CacheLoader<String, UUID>() {
@@ -95,8 +100,8 @@ public final class UUIDUtils {
      *
      * @param plugin The plugin to use
      */
-    public UUIDUtils(Plugin plugin) {
-        this(plugin, new UUIDCacheSettings());
+    public UUIDUtils(@NotNull Plugin plugin) {
+        this(plugin, block -> Bukkit.getScheduler().runTaskAsynchronously(plugin, block), new UUIDCacheSettings());
     }
 
     /**
@@ -108,7 +113,7 @@ public final class UUIDUtils {
      * @return An optional containing a uuid if the player could be found
      * @throws NullPointerException If the name is null
      */
-    public Optional<UUID> getUUID(String name) {
+    public @NotNull Optional<@NotNull UUID> getUUID(@NotNull String name) {
         try {
             return Optional.ofNullable(uuidCache.get(checkNotNull(name, "The name cannot be null").toLowerCase()));
         } catch (ExecutionException ee) {
@@ -128,7 +133,7 @@ public final class UUIDUtils {
      * @return An optional containing the name if the player could be found
      * @throws NullPointerException If the uuid is null
      */
-    public Optional<String> getName(UUID uuid) {
+    public @NotNull Optional<@NotNull String> getName(@NotNull UUID uuid) {
         try {
             return Optional.ofNullable(nameCache.get(checkNotNull(uuid, "The uuid cannot be null")));
         } catch (ExecutionException ee) {
@@ -140,43 +145,27 @@ public final class UUIDUtils {
     }
 
     /**
-     * Looks up a players uuid in an async thread and then will run the consumer in the main thread again
+     * Looks up a players uuid in an async thread.
      *
-     * @param name     The name of the player to look up
-     * @param callback The callback that will be called once the result is in
-     * @throws NullPointerException If the name or callback is null
+     * @param name The name of the player to look up
+     * @throws NullPointerException If the name is null
      * @see #getUUID(String)
      */
-    public void getUUID(String name, Consumer<Optional<UUID>> callback) {
+    public @NotNull CompletableFuture<@NotNull Optional<@NotNull UUID>> getUUIDAsync(@NotNull String name) {
         checkNotNull(name, "The name cannot be null");
-        checkNotNull(callback, "The callback cannot be null");
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            Optional<UUID> uuid = getUUID(name);
-            Bukkit.getScheduler().runTask(plugin, () -> callback.accept(uuid));
-        });
+        return CompletableFuture.supplyAsync(() -> getUUID(name), executor);
     }
 
     /**
-     * Looks up a players name in an async thread and then will run the consumer in the main thread again
+     * Looks up a players name in an async thread
      *
-     * @param uuid     The uuid of the player to look up
-     * @param callback The callback that will be called once the result is in
-     * @throws NullPointerException If the uuid or callback is null
+     * @param uuid The uuid of the player to look up
+     * @throws NullPointerException If the uuid is null
      * @see #getName(UUID)
      */
-    public void getName(UUID uuid, Consumer<String> callback) {
+    public @NotNull CompletableFuture<@NotNull Optional<@NotNull String>> getNameAsync(@NotNull UUID uuid) {
         checkNotNull(uuid, "The uuid cannot be null");
-        checkNotNull(callback, "The callback cannot be null");
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                String name = nameCache.get(uuid);
-                Bukkit.getScheduler().runTask(plugin, () -> callback.accept(name));
-                return;
-            } catch (ExecutionException ee) {
-                plugin.getLogger().log(Level.SEVERE, "An error occurred while trying to retrieve the name of the player with the uuid of " + uuid, ee);
-            }
-            Bukkit.getScheduler().runTask(plugin, () -> callback.accept(null));
-        });
+        return CompletableFuture.supplyAsync(() -> getName(uuid), executor);
     }
 
     /**
@@ -185,7 +174,7 @@ public final class UUIDUtils {
      * @param input The string to test
      * @return <code>true</code> if the string is a uuid
      */
-    public static boolean isUUID(String input) {
+    public static boolean isUUID(@NotNull String input) {
         return UUID_PATTERN.matcher(checkNotNull(input, "The input to check can't be null")).matches();
     }
 

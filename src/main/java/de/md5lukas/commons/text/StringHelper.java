@@ -1,5 +1,7 @@
 package de.md5lukas.commons.text;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -18,7 +20,7 @@ public final class StringHelper {
      * @return <code>true</code> if the name is a valid username
      * @throws NullPointerException If the provided string is null
      */
-    public static boolean isPlayerName(String string) {
+    public static boolean isPlayerName(@NotNull String string) {
         return MC_USERNAME_PATTERN.matcher(checkNotNull(string, "The string to check cannot be null")).matches();
     }
 
@@ -31,7 +33,7 @@ public final class StringHelper {
      * @throws NullPointerException     If the input string is null
      * @throws IllegalArgumentException If the maxLineLength is negative
      */
-    public static List<String> wordWrap(String input, int maxLineLength) {
+    public static @NotNull List<@NotNull String> wordWrap(@NotNull String input, int maxLineLength) {
         checkNotNull(input, "The input string cannot be null");
         checkArgument(maxLineLength >= 0, "The max line length cannot be negative");
 
@@ -65,7 +67,7 @@ public final class StringHelper {
      * @throws NullPointerException     If the string or suffix is null
      * @throws IllegalArgumentException If the suffix is longer than the string
      */
-    public static String removeSuffix(String string, String suffix) {
+    public static @NotNull String removeSuffix(@NotNull String string, @NotNull String suffix) {
         checkNotNull(string, "The string cannot be null");
         checkNotNull(suffix, "The suffix cannot be null");
         checkArgument(string.length() >= suffix.length(), "The suffix is longer than the string where it should be removed");

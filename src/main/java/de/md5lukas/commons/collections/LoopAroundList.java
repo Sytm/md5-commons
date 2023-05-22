@@ -1,5 +1,7 @@
 package de.md5lukas.commons.collections;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,7 +93,7 @@ public class LoopAroundList<T> extends ArrayList<T> {
     /**
      * @return The values that are currently in the cutout
      */
-    public List<T> getCutOut() {
+    public @NotNull List<T> getCutOut() {
         ArrayList<T> result = new ArrayList<>();
         for (int i = 0; i < cutOutSize; i++) {
             int actualIndex = i - index;

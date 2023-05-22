@@ -1,5 +1,7 @@
 package de.md5lukas.commons.collections;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -68,7 +70,7 @@ public class PaginationList<T> extends ArrayList<T> {
      * @throws IllegalArgumentException If the page is out of bounds
      * @see List#subList(int, int) This method is used to create the returned list, so do not moidfy the list
      */
-    public List<T> page(int page) {
+    public @NotNull List<T> page(int page) {
         if (size() == 0)
             return Collections.emptyList();
         return subList(pageStart(page), pageEnd(page));
