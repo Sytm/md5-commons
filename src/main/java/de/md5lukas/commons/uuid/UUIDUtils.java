@@ -53,9 +53,9 @@ public final class UUIDUtils {
         this.executor = executor;
 
         uuidCache = CacheBuilder.newBuilder().maximumSize(settings.getMaxSize())
-                .expireAfterWrite(settings.getExpireAfterWrite(), settings.getExpireAfterWriteTimeUnit()).build(new CacheLoader<String, UUID>() {
+                .expireAfterWrite(settings.getExpireAfterWrite(), settings.getExpireAfterWriteTimeUnit()).build(new CacheLoader<>() {
                     @Override
-                    public UUID load(String name) throws Exception {
+                    public @NotNull UUID load(String name) throws Exception {
                         checkArgument(name.length() >= 3, "The name provided for uuid look-up is too short");
                         name = name.toLowerCase();
                         Player player = Bukkit.getPlayerExact(name);
@@ -64,27 +64,31 @@ public final class UUIDUtils {
                         }
                         HttpURLConnection connection = (HttpURLConnection) new URL(String.format(UUID_URL, name)).openConnection();
                         connection.setReadTimeout(500);
-                        JsonObject json = new JsonParser()
-                                .parse(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine())
+
+                        JsonObject json = JsonParser
+                                .parseReader(new InputStreamReader(connection.getInputStream()))
                                 .getAsJsonObject();
+
                         return uuidFromTrimmed(json.get("id").getAsString());
                     }
                 });
         nameCache = CacheBuilder.newBuilder().maximumSize(settings.getMaxSize())
-                .expireAfterWrite(settings.getExpireAfterWrite(), settings.getExpireAfterWriteTimeUnit()).build(new CacheLoader<UUID, String>() {
+                .expireAfterWrite(settings.getExpireAfterWrite(), settings.getExpireAfterWriteTimeUnit()).build(new CacheLoader<>() {
                     @Override
-                    public String load(UUID uuid) throws Exception {
+                    public @NotNull String load(UUID uuid) throws Exception {
                         Player player = Bukkit.getPlayer(checkNotNull(uuid, "The uuid to look up cannot be null!"));
                         if (player != null) {
                             return player.getName();
                         }
+
                         HttpURLConnection connection = (HttpURLConnection) new URL(
                                 String.format(NAME_URL, trimUUID(uuid))).openConnection();
                         connection.setReadTimeout(500);
 
-                        JsonArray jsonArray = new JsonParser()
-                                .parse(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine())
+                        JsonArray jsonArray = JsonParser
+                                .parseReader(new InputStreamReader(connection.getInputStream()))
                                 .getAsJsonArray();
+
                         JsonObject json = jsonArray.get(jsonArray.size() - 1).getAsJsonObject();
                         String name = json.get("name").getAsString();
                         uuidCache.put(name.toLowerCase(), uuid);

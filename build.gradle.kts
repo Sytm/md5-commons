@@ -3,26 +3,21 @@ plugins {
     `maven-publish`
 }
 
-group = "de.md5lukas"
-version = "2.1.0"
-description = "md5-commons"
-
 repositories {
     mavenCentral()
 
-    maven(url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
+    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
-    api("org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT")
-    compileOnly("org.jetbrains:annotations:24.0.1")
+    api(libs.paper)
+    compileOnly(libs.annotations)
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    testImplementation(libs.junitJupiter)
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(libs.versions.jvmToolchain.get().toInt()))
     withSourcesJar()
     withJavadocJar()
 }
@@ -32,11 +27,15 @@ publishing {
         maven {
             name = "md5lukasReposilite"
 
-            url = uri("https://repo.md5lukas.de/${if (version.toString().endsWith("-SNAPSHOT")) {
-                "snapshots"
-            } else {
-                "releases"
-            }}")
+            url = uri(
+                "https://repo.md5lukas.de/${
+                    if (version.toString().endsWith("-SNAPSHOT")) {
+                        "snapshots"
+                    } else {
+                        "releases"
+                    }
+                }"
+            )
             credentials(PasswordCredentials::class)
             authentication {
                 create<BasicAuthentication>("basic")
@@ -48,8 +47,6 @@ publishing {
     }
 }
 
-tasks.withType<JavaCompile>() {
+tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
-    sourceCompatibility = "1.8"
-    targetCompatibility = "1.8"
 }

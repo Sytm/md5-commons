@@ -1,0 +1,10 @@
+[versions]
+jvmToolchain = "17"
+paper = "1.19.4-R0.1-SNAPSHOT"
+
+[libraries]
+annotations = { group = "org.jetbrains", name = "annotations", version = "24.0.1" }
+
+paper = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
+
+junitJupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.9.2" }
