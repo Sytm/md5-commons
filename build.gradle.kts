@@ -1,5 +1,11 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
-    `java-library`
+    with(libs.plugins) {
+        alias(kotlin)
+        alias(dokka)
+        alias(spotless)
+    }
     `maven-publish`
 }
 
@@ -10,16 +16,33 @@ repositories {
 }
 
 dependencies {
+    api(libs.stdlib)
     api(libs.paper)
     compileOnly(libs.annotations)
 
+    testImplementation(libs.kotlinJupiter)
     testImplementation(libs.junitJupiter)
 }
 
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(libs.versions.jvmToolchain.get().toInt()))
-    withSourcesJar()
-    withJavadocJar()
+kotlin {
+    jvmToolchain(libs.versions.jvmToolchain.get().toInt())
+}
+
+spotless {
+    kotlin {
+        ktfmt()
+    }
+}
+
+tasks.withType<KotlinCompile> {
+    compilerOptions.freeCompilerArgs.addAll(
+        "-Xjvm-default=all",
+        "-Xlambdas=indy",
+    )
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 publishing {
@@ -43,10 +66,6 @@ publishing {
         }
     }
     publications.create<MavenPublication>("maven") {
-        from(components["java"])
+        from(components["kotlin"])
     }
-}
-
-tasks.withType<JavaCompile> {
-    options.encoding = "UTF-8"
 }

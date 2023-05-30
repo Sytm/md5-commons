@@ -1,105 +1,92 @@
-package de.md5lukas.commons.collections;
+package de.md5lukas.commons.collections
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.google.common.base.Preconditions.checkArgument;
-
+import com.google.common.base.Preconditions
 
 /**
  * A simple class that will present a cutout based on the index and will, if required loop around
- * <br>
- * Example:
- * <pre>{@literal
+ * <br></br> Example:
+ * ```
  * |1 2 3 4 5 6 7 8|
- * |      <----->  |}
- * {@link #next()}{@literal
- * |1 2 3 4 5 6 7 8|
- * |        <----->|}
- * {@link #next()}{@literal
- * |1 2 3 4 5 6 7 8|
- * |>         <----|}
- * {@link #next()}{@literal
- * |1 2 3 4 5 6 7 8|
- * |-->         <--|}
- * </pre>
+ * |      <----->  |
+ * ```
  *
- * @param <T> The type of the list
+ * [next]
+ *
+ * ```
+ * |1 2 3 4 5 6 7 8|
+ * |        <----->|
+ * ```
+ *
+ * [next]
+ *
+ * ```
+ * |1 2 3 4 5 6 7 8|
+ * |>         <----|
+ * ```
+ *
+ * [next]
+ *
+ * ```
+ * |1 2 3 4 5 6 7 8|
+ * |-->         <--|
+ * ```
+ *
+ * @param T The type of the list
+ * @constructor Creates a new instance of this list with the specified cutout size
+ * @property cutOutSize The cutout size to use
+ * @throws IllegalArgumentException If cutout size is equal or lower than zero
  */
-public class LoopAroundList<T> extends ArrayList<T> {
+class LoopAroundList<T>(private val cutOutSize: Int) : ArrayList<T>() {
 
-    private final int cutOutSize;
-    private int index;
+  private var index: Int = 0
 
-    /**
-     * Creates a new instance of this list with the specified cutout size
-     *
-     * @param cutOutSize The cutout size to use
-     * @throws IllegalArgumentException If cutout size is equal or lower than zero
-     */
-    public LoopAroundList(int cutOutSize) {
-        checkArgument(cutOutSize > 0, "The cutout size needs to be greater than zero, but was %d", cutOutSize);
-        this.cutOutSize = cutOutSize;
-        this.index = 0;
-    }
+  init {
+    Preconditions.checkArgument(
+        cutOutSize > 0, "The cutout size needs to be greater than zero, but was %d", cutOutSize)
+  }
 
-    /**
-     * Moves the cutout one forward
-     *
-     * @return The current index
-     */
-    public int next() {
-        return move(1);
-    }
+  /**
+   * Moves the cutout one forward
+   *
+   * @return The current index
+   */
+  fun next(): Int = move(1)
 
-    /**
-     * Moves the cutout one backwards
-     *
-     * @return The current index
-     */
-    public int previous() {
-        return move(-1);
-    }
+  /**
+   * Moves the cutout one backwards
+   *
+   * @return The current index
+   */
+  fun previous(): Int = move(-1)
 
-    /**
-     * Moves the cutout the specified amount. The value may be negative
-     *
-     * @param steps The amount of steps to move
-     * @return The current index
-     */
-    public int move(int steps) {
-        return setIndex(index + steps);
-    }
+  /**
+   * Moves the cutout the specified amount. The value may be negative
+   *
+   * @param steps The amount of steps to move
+   * @return The current index
+   */
+  fun move(steps: Int): Int = setIndex(index + steps)
 
-    /**
-     * Sets the index of the cutout start to the given value
-     *
-     * @param index The new index
-     * @return The current index corrected for wrap-around
-     */
-    public int setIndex(int index) {
-        this.index = index;
-        while (this.index > size()) {
-            this.index -= size();
-        }
-        while (this.index < 0) {
-            this.index += size();
-        }
-        return this.index;
-    }
+  /**
+   * Sets the index of the cutout start to the given value
+   *
+   * @param index The new index
+   * @return The current index corrected for wrap-around
+   */
+  fun setIndex(index: Int): Int {
+    this.index = Math.floorMod(index, size)
+    return this.index
+  }
 
-    /**
-     * @return The values that are currently in the cutout
-     */
-    public @NotNull List<T> getCutOut() {
-        ArrayList<T> result = new ArrayList<>();
-        for (int i = 0; i < cutOutSize; i++) {
-            int actualIndex = i - index;
-            actualIndex = actualIndex >= 0 ? actualIndex : actualIndex + size();
-            result.add(get(actualIndex));
-        }
-        return result;
+  val cutOut: List<T>
+    /** @return The values that are currently in the cutout */
+    get() {
+      val result = ArrayList<T>()
+      for (i in 0 until cutOutSize) {
+        var actualIndex = i - index
+        actualIndex = if (actualIndex >= 0) actualIndex else actualIndex + size
+        result.add(get(actualIndex))
+      }
+      return result
     }
 }

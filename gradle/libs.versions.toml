@@ -1,10 +1,18 @@
 [versions]
+kotlin = "1.8.21"
 jvmToolchain = "17"
 paper = "1.19.4-R0.1-SNAPSHOT"
 
 [libraries]
+stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 annotations = { group = "org.jetbrains", name = "annotations", version = "24.0.1" }
 
 paper = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
 
+kotlinJupiter = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit5", version.ref = "kotlin" }
 junitJupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.9.2" }
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+dokka = { id = "org.jetbrains.dokka", version = "1.+" }
+spotless = { id = "com.diffplug.spotless", version = "6.+" }
